@@ -17,7 +17,7 @@ if (folder !== "") {
     fullPathConfig =  "app/Configs/" + folder + "/"
 }
 //neu co khai bao them file config khác thì đặt tên no vào mảng dưới
-let arr_config_file = ["constant", "database","log", "session"]
+let arr_config_file = ["constant", "database", "log"]
 let configs = {}
 let obj = {}
 let path_temp
