@@ -53,7 +53,7 @@ const AuthorizationLayout = props => {
             </AppBar>
             <Box sx={{display: "flex"}}>
                 <Container>
-                    <Grid container spacing={1} sx={{mt: 8}} className={"container-height"}>
+                    <Grid container sx={{mt: 8}} className={"container-height"}>
                         {props.children}
                     </Grid>
                     <Copyright sx={{pt: 4}}/>

@@ -14,7 +14,7 @@ const MainRoutes = [
         component: Index,
     },
     {
-        path: '/users/add',
+        path: '/register',
         title: "Register",
         component: UsersAdd
     },
