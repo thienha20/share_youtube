@@ -40,17 +40,12 @@ const Videos = memo((props) => {
             if (rows) {
                 let code = rows.map(i => i.youtube_code)
                 let rs = await getYoutubeInfo(code)
-                console.log(rs)
                 setVideoList(rs)
             }
         }
 
         fetchData()
     }, [rows, setVideoList])
-
-    useEffect(()=>{
-        console.log(params)
-    }, [params])
 
     const handleChangePage = (event, newPage) => {
         let currentPage = parseInt(newPage) + 1
@@ -63,8 +58,8 @@ const Videos = memo((props) => {
         <>
             {rows ? rows.map((i, k) => (
                     <Grid container spacing={2} sx={{mt: 1}} key={k}>
-                        <Grid item>
-                            <iframe width="560" height="315" src={`https://www.youtube.com/embed/${i.youtube_code}`}
+                        <Grid item xs sm container>
+                            <iframe width="100%" height="315" src={`https://www.youtube.com/embed/${i.youtube_code}`}
                                     title="YouTube video player" frameBorder="0"
                                     allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
                                     allowFullScreen/>
@@ -97,7 +92,7 @@ const Videos = memo((props) => {
                     </Grid>
                 )
             ) : null}
-            {pageTotal > 1 ? <Pagination count={pageTotal} page={parseInt(params.page)} sx={{mt:2}}
+            {pageTotal > 1 ? <Pagination count={pageTotal} page={params.page ? parseInt(params.page) : 1} sx={{mt:2}}
                                          onChange={(e, page) => handleChangePage(e, page - 1)}/> : null}
         </>
     )

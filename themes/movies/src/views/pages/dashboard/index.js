@@ -8,7 +8,7 @@ const Dashboard = () => {
     return (
         <MainLayout>
             <Grid item xs={12}>
-                <Paper sx={{ p: 2, display: 'flex', flexDirection: 'column' }}>
+                <Paper sx={{ p: 1, display: 'flex', flexDirection: 'column' }}>
                     <Videos />
                 </Paper>
             </Grid>
