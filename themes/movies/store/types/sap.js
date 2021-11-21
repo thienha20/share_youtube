@@ -1,0 +1,1 @@
+export const SAP_LOGS = '@sap/LOGS';

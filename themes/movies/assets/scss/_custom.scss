@@ -1,0 +1,71 @@
+// Here you can add other styles
+a{
+  text-decoration: none;
+}
+#tat_login {
+  width: 100% !important;
+}
+.MuiTypography-root{
+  a{
+    text-decoration: none;
+    color: #333
+  }
+}
+#tree_menu{
+  &>.MuiTreeItem-root{
+    .MuiTreeItem-content{
+      .MuiTreeItem-iconContainer{
+        margin-right: 0;
+      }
+    }
+    &:first-child{
+      .MuiTreeItem-content {
+        .MuiTreeItem-iconContainer {
+            display: none;
+        }
+      }
+    }
+  }
+}
+.container-height{
+  min-height: 500px;
+}
+
+table.MuiTable-root{
+  thead{
+    th{
+      font-weight: 600;
+    }
+  }
+}
+
+#go-page{
+  text-align: center;
+}
+#go-page-label{
+  font-size: 12px;
+  &.Mui-focused{
+    font-size: 16px;
+  }
+  &.MuiFormLabel-filled{
+    font-size: 16px;
+  }
+}
+
+.waiting-background{
+  display: block;
+  position: absolute;
+  z-index: 99998;
+  width: 100%;
+  height: 100%;
+  top:0;
+  opacity: 0.2;
+  background-color: #AAAAAA;
+}
+.waiting-icon{
+  display: block;
+  position: absolute;
+  z-index: 99999;
+  top:40%;
+  left: 50%;
+}
