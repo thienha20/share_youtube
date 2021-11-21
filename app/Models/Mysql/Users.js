@@ -1,7 +1,6 @@
 /* jshint indent: 2 */
 
-import { Model, Sequelize } from 'sequelize';
-import ShareModel from "./Shares";
+import { Model, Sequelize } from 'sequelize'
 
 class Users extends Model {
   static init(sequelize, DataTypes) {
@@ -9,6 +8,7 @@ class Users extends Model {
       user_id: {
         type: DataTypes.INTEGER,
         allowNull: false,
+        autoIncrement: true,
         primaryKey: true
       },
       email: {
@@ -54,8 +54,8 @@ class Users extends Model {
     return Users;
   }
 
-  static associate = () => {
-    Users.hasMany(ShareModel, {foreignKey: 'user_id'})
+  static associate = (models) => {
+    Users.hasMany(models.Shares, {foreignKey: 'user_id'})
   }
 }
 

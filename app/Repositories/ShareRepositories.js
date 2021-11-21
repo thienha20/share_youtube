@@ -43,12 +43,13 @@ class ShareRepositories {
     }
 
     listShares = async (params, per_page = 10) => {
-        let {shareId, userId, code, link, getUserInfo, sort, limit, page, item_per_page, customFields} = {...params}
+        console.log(params)
+        let {shareId, userId, code, link, getUserInfo, sort, limit, page, itemPerPage, customFields} = {...params}
         let defaultFields = [
             "*"
         ]
         if(customFields) {
-            defaultFields = {...customFields}
+            defaultFields = [...customFields]
         }
         let condition = {}
         if(shareId){
@@ -78,19 +79,22 @@ class ShareRepositories {
             }]
         }
         if (sort) {
-            order = sort
+            order = []
+            Object.entries(sort).forEach(([key, value]) => order.push([key, value < 1 ? 'DESC' : 'ASC']));
         }
         try{
             if (!limit) {
                 params.total = await this.ShareModel.count({
                     where: condition
                 })
-                let per = !item_per_page ? per_page : item_per_page
+                let per = !itemPerPage ? per_page : parseInt(itemPerPage)
                 if (page) {
                     if (page < 1) page = 1
                     offset = (page - 1) * per
                 }
+                limit = per
             }
+
             Shares = await this.ShareModel.findAll({
                 attributes: defaultFields,
                 include: includes,

@@ -9,7 +9,7 @@ class ShareController extends Controller {
     }
 
     list = async (req, res) => {
-        let params = {...req.body, getUserInfo: true}
+        let params = {...req.query, getUserInfo: true, customFields: ["link", "youtube_code"]}
         let listShares = await ShareRepositories.listShares(params)
         res.json({
             status: 200,
@@ -36,7 +36,7 @@ class ShareController extends Controller {
         let Share = await ShareRepositories.updateShare({
             user_id: req.session.userData["user_id"],
             link,
-            code
+            youtube_code: code
         })
 
         if(!Share){

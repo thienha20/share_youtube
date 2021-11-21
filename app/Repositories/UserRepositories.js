@@ -36,7 +36,7 @@ class UserRepositories {
     }
 
     listUsers = async (params, per_page = 10) => {
-        let {email, userId, sort, limit, page, item_per_page, customFields} = {...params}
+        let {email, userId, sort, limit, page, itemPerPage, customFields} = {...params}
         let defaultFields = [
             "*"
         ]
@@ -65,11 +65,12 @@ class UserRepositories {
                 params.total = await this.UserModel.count({
                     where: condition
                 })
-                let per = !item_per_page ? per_page : item_per_page
+                let per = !itemPerPage ? per_page : parseInt(itemPerPage)
                 if (page) {
                     if (page < 1) page = 1
                     offset = (page - 1) * per
                 }
+                limit = per
             }
             Users = await this.UserModel.findAll({
                 attributes: defaultFields,
