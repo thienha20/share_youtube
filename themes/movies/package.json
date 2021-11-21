@@ -1,5 +1,6 @@
 {
   "name": "movies",
+  "author": "dungtrac - thienha20@yahoo.com",
   "version": "0.1.0",
   "private": true,
   "dependencies": {

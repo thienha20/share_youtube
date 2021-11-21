@@ -9,13 +9,13 @@ import hsts from 'hsts'
 import cors from 'cors'
 import restFul from './Routes/api'
 import https from 'https'
-import http from 'http'
 import toobusy from './Helpers/toobusy'
 import useragent from 'express-useragent'
-// import {requestLog} from './Helpers/middlewares'
 import expressip from 'express-ip'
 import dir from 'node-dir'
 import multer from 'multer'
+import session from 'express-session'
+import cookieParser from 'cookie-parser'
 //call env
 dotenv.config(path.resolve(process.cwd(), '.env'))
 const app = express()
@@ -39,28 +39,27 @@ app.use(helmet.xssFilter())
 app.use(helmet.frameguard('deny'))
 app.use(helmet.ieNoOpen())
 app.use(helmet.noSniff())
-
 app.use(cors())//hỗ trợ crossdomain
 app.use(useragent.express())
 app.use(expressip().getIpInfoMiddleware)
-// app.use("*", (req, res, next) => {
-//     //requestLog(req)
-//     next()
-// })
+app.use(cookieParser())
+app.use(session({
+    secret: 'dajMThd!21331^%$09gdGSAF',
+    resave: false,
+    saveUninitialized: true,
+    cookie: {maxAge: 60000}
+}))
 
 const controllerPath = {
-    graphql: path.resolve(__dirname, '../app/Controllers/graphql'),
-    restFul: path.resolve(__dirname, '../app/Controllers/api'),
-    web: path.resolve(__dirname, '../app/Controllers/web'),
+    restFul: path.resolve(__dirname, '../app/Controllers/api')
 }
 
 /* API restful */
 app.use(bodyParser.json())
 app.use(bodyParser.raw())
-app.use(bodyParser.text({ type: 'text/html' }))
+app.use(bodyParser.text({type: 'text/html'}))
 app.use(multer().array())
 app.use(bodyParser.urlencoded({extended: true}))
-
 const staticPath = path.resolve(process.cwd(), 'public/')
 app.use(express.static(staticPath))
 
@@ -87,9 +86,6 @@ app.get('*', (req, res) => {
         "message": "restricted access"
     })
 })
-
-//run schedule
-//runSchedule()
 
 //start app
 const port = process.env.NODE_PORT || 3000

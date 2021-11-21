@@ -1,8 +1,5 @@
-import Controller from './Controller'
-import UserRepositories from "../../Repositories/UserRepositories";
-import jwt from "jsonwebtoken";
-import configs from "../../Configs";
-import logger from "../../Helpers/logger";
+import Controller from "./Controller"
+import UserRepositories from "../../Repositories/UserRepositories"
 
 class UserController extends Controller {
 
@@ -10,63 +7,59 @@ class UserController extends Controller {
         super()
     }
 
-    /**
-     * @api {post} /login Login user
-     * @apiName Login
-     * @apiGroup User
-     * @apiHeaderExample {json} Header-Example:
-     *     {
-     *       "Content-type" : "application\json"
-     *     }
-
-     * @apiParam {string} username account login (required)
-     * @apiParam {string} password your password  (required)
-     *
-     * @apiSuccess {Object} result
-     * @apiSuccessExample Success-Response:
-     *     {
-     *        "status": 200
-     *        "message": "Thành công!",
-     *        "data": {
-     *            "token": "..."
-     *        }
-     *     }
-     *
-     * @apiError {Object} error.
-     * @apiErrorExample Error-Response:
-     *     {
-     *       "message": "...",
-     *       "status": !=(200)
-     *     }
-     */
     login = async (req, res) => {
-        let params = {...req.body};
-        if (!params.username || !params.password) {
+        let params = {...req.body}
+        if (!params.email || !params.password) {
             return res.json({
                 status: 422,
                 message: "Biến truyền vào không đúng"
-            });
+            })
         }
         let userData = await UserRepositories.getUser({
-            username: params.username,
+            email: params.email,
             password: params.password
         })
         if (userData != null && userData) {
-            jwt.sign({...userData.dataValues}, configs.tokenKey, {expiresIn: configs.tokenTimeout}, function (err, token) {
-                if (err) {
-                    logger.error(err.message)
-                    res.json({status: 500, message: "Server Error", data: {token: token}})
-                } else {
-                    res.json({status: 200, message: "Thành công!", data: {token: token}})
-                }
+            req.session.userData = userData
+            res.json({
+                status: 200,
+                message: "Thành công!",
+                data: userData
             })
         } else {
             return res.json({
                 status: 400,
                 message: "Tài khoản không tồn tại"
-            });
+            })
         }
+    }
+
+
+    logout = async (req, res) => {
+        if(req.session.userData){
+            req.session.reload((err) => {
+               if(err){
+                   res.json({
+                       status: 500,
+                       message: "Lổi hệ thống không thể logout"
+                   })
+               }else{
+                   res.json({
+                       status: 200,
+                       message: "Logout thành công!",
+                       data: true
+                   })
+               }
+            })
+        }
+    }
+
+    me = async (req, res) => {
+        res.json({
+            status: 200,
+            data: req.session.userData
+        })
     }
 }
 
-export const objClass = new UserController();
+export const objClass = new UserController()
