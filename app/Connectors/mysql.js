@@ -3,7 +3,7 @@ import configs from '../Configs'
 
 export default new Sequelize(configs.mysql_master.db_master_db, null, null, {
     dialect: configs.mysql_master.db_master_dialect,
-    logging: false,
+    logging: true,
     replication: {
         read: [
             {

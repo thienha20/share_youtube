@@ -1,53 +1,62 @@
 /* jshint indent: 2 */
 
-import { Model } from 'sequelize';
+import { Model, Sequelize } from 'sequelize';
+import ShareModel from "./Shares";
 
-export default class Users extends Model {
+class Users extends Model {
   static init(sequelize, DataTypes) {
-  super.init({
-    user_id: {
-      autoIncrement: true,
-      type: DataTypes.INTEGER.UNSIGNED,
-      allowNull: false,
-      primaryKey: true
-    },
-    username: {
-      type: DataTypes.STRING(50),
-      allowNull: false,
-      unique: "username"
-    },
-    password: {
-      type: DataTypes.STRING(32),
-      allowNull: false
-    },
-    max_todo: {
-      type: DataTypes.INTEGER.UNSIGNED,
-      allowNull: true,
-      defaultValue: 5
-    }
-  }, {
-    sequelize,
-    tableName: 'users',
-    timestamps: false,
-    indexes: [
-      {
-        name: "PRIMARY",
-        unique: true,
-        using: "BTREE",
-        fields: [
-          { name: "user_id" },
-        ]
+    super.init({
+      user_id: {
+        type: DataTypes.INTEGER,
+        allowNull: false,
+        primaryKey: true
       },
-      {
-        name: "username",
-        unique: true,
-        using: "BTREE",
-        fields: [
-          { name: "username" },
-        ]
+      email: {
+        type: DataTypes.STRING(100),
+        allowNull: false,
+        defaultValue: "",
+        unique: "email"
       },
-    ]
-  });
-  return Users;
+      password: {
+        type: DataTypes.STRING(50),
+        allowNull: false,
+        defaultValue: ""
+      },
+      timestamp: {
+        type: DataTypes.DATE,
+        allowNull: false,
+        defaultValue: Sequelize.literal('CURRENT_TIMESTAMP')
+      }
+    }, {
+      sequelize,
+      tableName: 'users',
+      // schema: 'movies',
+      timestamps: false,
+      indexes: [
+        {
+          name: "PRIMARY",
+          unique: true,
+          using: "BTREE",
+          fields: [
+            { name: "user_id" },
+          ]
+        },
+        {
+          name: "email",
+          unique: true,
+          using: "BTREE",
+          fields: [
+            { name: "email" },
+          ]
+        },
+      ]
+    });
+    return Users;
+  }
+
+  static associate = () => {
+    Users.hasMany(ShareModel, {foreignKey: 'user_id'})
   }
 }
+
+export default Users

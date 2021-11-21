@@ -1,19 +1,19 @@
 import dotenv from 'dotenv'
 import path from "path"
-import {defaultRequest, validToken} from '../Helpers/middlewares'
 
 dotenv.config(path.resolve(process.cwd(), '.env'))
 export const apiPath = "/api/v1"
 
 export default (app, Controllers) => {
-    //set default methods for all API restful
-    defaultRequest(app, Controllers, apiPath)
-
     /* controller API*/
     //-- user Controller
     app.post(apiPath + '/login', (req, res) => Controllers["User"].login(req, res))
+    app.post(apiPath + '/me', (req, res) => Controllers["User"].me(req, res))
+    app.post(apiPath + '/register', (req, res) => Controllers["User"].register(req, res))
+    app.post(apiPath + '/logout', (req, res) => Controllers["User"].logout(req, res))
     //--tasks Controller
-    app.post(apiPath + '/tasks', [validToken], (req, res) => Controllers["Task"].tasks(req, res))
+    app.get(apiPath + '/shares', (req, res) => Controllers["Share"].list(req, res))
+    app.post(apiPath + '/share/add', (req, res) => Controllers["Share"].add(req, res))
 
 
 }
