@@ -100,7 +100,10 @@ const Videos = () => {
                 )
             ) : null}
             {pageTotal > 1 ? <Pagination count={pageTotal} page={params.page ? parseInt(params.page) : 1} sx={{mt: 2}}
-                                         onChange={(e, page) => handleChangePage(e, page - 1)}/> : null}
+                                         onChange={(e, page) => {
+                                             handleChangePage(e, page - 1)
+                                             window.scrollTo(0, 0)
+                                         }}/> : null}
         </>
     )
 }

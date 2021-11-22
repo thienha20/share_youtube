@@ -50,7 +50,7 @@ const AuthorizationLayout = props => {
                         Register
                     </Typography>
                     </Box> : <Box className={"header-login"}>
-                        <Typography sx={{mr: 2}}>hi {user.email}</Typography>
+                        <Typography sx={{mr: 2}} component={"span"}>hi {user.email}</Typography>
                         <Button variant="contained" disableElevation color="error"
                                 onClick={() => history.push("/share/add")}>
                             Share Movie
