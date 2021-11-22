@@ -13,7 +13,7 @@ Install the packages for nodejs (open terminal)
 npm install
 ```
 
-Config .env connect mysql
+Change file .env.development to .env connect mysql
 
 ```bash
 DB_MASTER_DIALECT=mysql
