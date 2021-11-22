@@ -29,7 +29,7 @@ export const ajaxGet = (url, data = null, cb = null) => {
         .then(function (response) {
             // handle success
             if (cb && typeof cb === "function") {
-                cb()
+                cb(response)
             }
             return response.data
         })
@@ -53,7 +53,7 @@ export const ajaxPost = (url, data = {}, cb = null) => {
         .then(function (response) {
             // handle success
             if (cb && typeof cb === "function") {
-                cb()
+                cb(response)
             }
             return response.data
         })

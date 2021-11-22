@@ -15,6 +15,8 @@ const usersReducer = (state = initialState, action) => {
         case actionTypes.USER_LOGIN:
             return {
                 ...state,
+                currentUser: action.payload ?? null,
+                isLoggingIn: !!action.payload.user_id
             }
         case actionTypes.USER_REGISTER:
             return {
@@ -23,12 +25,14 @@ const usersReducer = (state = initialState, action) => {
         case actionTypes.USER_LOGOUT:
             return {
                 ...state,
+                currentUser: null,
+                isLoggingIn: false
             }
         case actionTypes.USER_ME:
             return {
                 ...state,
                 currentUser: action.payload ?? null,
-                isLoggingIn: !!action.payload
+                isLoggingIn: !!action.payload?.user_id
             }
         default:
             return state

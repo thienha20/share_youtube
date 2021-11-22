@@ -1,4 +1,4 @@
-import React, {useEffect} from "react"
+import React, {useEffect, useState} from "react"
 import {useHistory} from "react-router-dom"
 import Avatar from "@mui/material/Avatar"
 import Button from "@mui/material/Button"
@@ -7,12 +7,16 @@ import Box from "@mui/material/Box"
 import LockOutlinedIcon from "@mui/icons-material/LockOutlined"
 import Typography from "@mui/material/Typography"
 import MainLayout from "../../../layout/MainLayout"
-import {useSelector} from "react-redux"
-
+import {useSelector, useDispatch} from "react-redux"
+import allActions from "../../../store/actions"
+import {ValidateEmail} from "../../../utils/valid"
 const Login = () => {
+    const [email, setEmail] = useState("")
+    const [password, setPassword] = useState("")
+    const [validEmail, setValidEmail] = useState(false)
     let isLoggingIn = useSelector(state => state.users.isLoggingIn)
     const history = useHistory()
-
+    const dispatch = useDispatch()
     useEffect(() => {
         if (isLoggingIn) {
             history.push("/")
@@ -21,6 +25,17 @@ const Login = () => {
 
     const handleSubmit = (event) => {
         event.preventDefault()
+        if (!ValidateEmail(email)) {
+            setValidEmail(true)
+            return false
+        }
+        dispatch(allActions.users.userLogin({
+            user:{
+                email,
+                password
+            },
+            loading:true
+        }))
     }
 
     return (
@@ -50,7 +65,15 @@ const Login = () => {
                         label="Email Address"
                         name="email"
                         autoComplete="email"
+                        onChange={e => {
+                            if (ValidateEmail(e.target.value)) {
+                                setValidEmail(false)
+                            }
+                            setEmail(e.target.value)
+                        }}
                         autoFocus
+                        error={validEmail}
+                        helperText={validEmail ? "Email incorrect!" : null}
                     />
                     <TextField
                         margin="normal"
@@ -60,6 +83,7 @@ const Login = () => {
                         label="Password"
                         type="password"
                         id="password"
+                        onChange={e => setPassword(e.target.value)}
                         autoComplete="current-password"
                     />
                     <Button

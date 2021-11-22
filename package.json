@@ -53,6 +53,7 @@
     "chai": "^4.3.4",
     "chai-http": "^4.3.0",
     "cookie-parser": "^1.4.6",
+    "cookie-session": "^1.4.0",
     "cors": "^2.8.5",
     "device": "^0.3.11",
     "dotenv": "^6.2.0",

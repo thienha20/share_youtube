@@ -14,6 +14,9 @@ import CircularProgress from "@mui/material/CircularProgress"
 import MovieFilterIcon from "@mui/icons-material/MovieFilter"
 import {useSelector, useDispatch} from "react-redux"
 import allActions from "../../store/actions"
+import Button from "@mui/material/Button"
+import {Backdrop} from "@mui/material"
+import {useHistory} from "react-router-dom"
 // ===========================|| MAIN LAYOUT ||=========================== //
 const mdTheme = createTheme()
 
@@ -22,9 +25,14 @@ const AuthorizationLayout = props => {
     let user = useSelector(state => state.users.currentUser)
     let isLoggingIn = useSelector(state => state.users.isLoggingIn)
     const dispatch = useDispatch()
-    useEffect(()=>{
+    const history = useHistory()
+    useEffect(() => {
         dispatch(allActions.users.userMe())
-    },[dispatch])
+    }, [dispatch])
+
+    const logout = () => {
+        dispatch(allActions.users.userLogout({}))
+    }
 
     return (
         <ThemeProvider theme={mdTheme}>
@@ -42,12 +50,12 @@ const AuthorizationLayout = props => {
                         Register
                     </Typography>
                     </Box> : <Box className={"header-login"}>
-                        <Typography sx={{mr: 2}}>hi {user.email}</Typography>
-                        <Typography component={Link} to="/share" variant="Share Movie" style={{color: "red"}}>
+                        <Typography sx={{mr: 2}} component={"span"}>hi {user.email}</Typography>
+                        <Button variant="contained" disableElevation color="error"
+                                onClick={() => history.push("/share/add")}>
                             Share Movie
-                        </Typography> | <Typography component={Link} to="/logout" variant="Logout">
-                        Logout
-                    </Typography>
+                        </Button> | <Button variant="text" onClick={() => logout()}
+                                            style={{color: "#fff"}}>Logout</Button>
                     </Box>}
                 </Toolbar>
             </AppBar>
@@ -59,9 +67,12 @@ const AuthorizationLayout = props => {
                     <Copyright sx={{pt: 4}}/>
                 </Container>
             </Box>
-            {loading ? <><Box className={"waiting-background"}> </Box>
-                    <CircularProgress className={"waiting-icon"}/></>
-                : null}
+            {loading ? <Backdrop
+                sx={{color: "#fff", zIndex: (theme) => theme.zIndex.drawer + 1}}
+                open={true}
+            >
+                <CircularProgress color="inherit"/>
+            </Backdrop> : null}
         </ThemeProvider>
     )
 }

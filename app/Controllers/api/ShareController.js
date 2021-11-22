@@ -1,6 +1,6 @@
 import Controller from "./Controller"
 import ShareRepositories from "../../Repositories/ShareRepositories"
-import {valid_youtube_link} from "../../Helpers/function"
+import {validYoutubeLink} from "../../Helpers/function"
 
 class ShareController extends Controller {
 
@@ -26,7 +26,7 @@ class ShareController extends Controller {
                 message: "Dữ liệu truyền lên không đúng!"
             })
         }
-        let code = valid_youtube_link(link)
+        let code = validYoutubeLink(link)
         if(!code){
             return res.json({
                 status: 400,

@@ -6,7 +6,7 @@ export function convertCurrentDate() {
     return `${year}-${month < 10 ? `0${month}` : month}-${day < 10 ? `0${day}` : day}`
 }
 
-export function valid_youtube_link(url){
+export function validYoutubeLink(url){
     let yt = /^(?:https?:\/\/)?(?:m\.|www\.)?(?:youtu\.be\/|youtube\.com\/(?:embed\/|v\/|watch\?v=|watch\?.+&v=))((\w|-){11})(?:\S+)?$/;
     if(url.match(yt)){
         return url.match(yt)[1];
@@ -14,4 +14,11 @@ export function valid_youtube_link(url){
     return false;
 }
 
+export function validateEmail(mail) {
+    let rex = /^\w+([.-]?\w+)*@\w+([.-]?\w+)*(\.\w{2,3})+$/
+    if (rex.test(mail)) {
+        return true
+    }
+    return false
+}
 

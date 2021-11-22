@@ -12,9 +12,26 @@ const openLoading = () => {
     }
 }
 
+const showMessage = (params) => {
+    return {
+        type: Types.SHOW_MESSAGE,
+        payload: params
+    }
+}
+
+
+const closeMessage = (key) => {
+    return {
+        type: Types.REMOVE_MESSAGE,
+        payload: key
+    }
+}
+
 let commons = {
     closeLoading,
-    openLoading
+    openLoading,
+    showMessage,
+    closeMessage
 }
 
 export default commons
