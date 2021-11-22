@@ -43,7 +43,7 @@ class ShareRepositories {
     }
 
     listShares = async (params, per_page = 10) => {
-        console.log(params)
+        // console.log(params)
         let {shareId, userId, code, link, getUserInfo, sort, limit, page, itemPerPage, customFields} = {...params}
         let defaultFields = [
             "*"

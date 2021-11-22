@@ -14,11 +14,12 @@ import useragent from 'express-useragent'
 import expressip from 'express-ip'
 import dir from 'node-dir'
 import multer from 'multer'
-import session from 'express-session'
+import cookieSession from 'cookie-session'
 import cookieParser from 'cookie-parser'
 //call env
 dotenv.config(path.resolve(process.cwd(), '.env'))
 const app = express()
+app.set('trust proxy', 1)
 //security
 if (process.env.TOOBUSY) {
     app.use(toobusy)
@@ -39,16 +40,21 @@ app.use(helmet.xssFilter())
 app.use(helmet.frameguard('deny'))
 app.use(helmet.ieNoOpen())
 app.use(helmet.noSniff())
-app.use(cors())//hỗ trợ crossdomain
+app.use(cors({
+    origin: ['http://localhost:3000','https://localhost:3000'],
+    credentials: true
+}))//hỗ trợ crossdomain
 app.use(useragent.express())
 app.use(expressip().getIpInfoMiddleware)
-app.use(cookieParser())
-app.use(session({
-    secret: 'dajMThd!21331^%$09gdGSAF',
-    resave: false,
-    saveUninitialized: true,
-    cookie: {maxAge: 60000}
+app.use(cookieSession({
+    name: 'session',
+    keys: ['dajMThd!21331^%$09gdGSAF', 'dsa@127jdasASDA%^&'],
+    // Cookie Options
+    maxAge: 7 * 24 * 60 * 60 * 1000 // 7 day
 }))
+app.use(cookieParser())
+
+
 
 const controllerPath = {
     restFul: path.resolve(__dirname, '../app/Controllers/api')
@@ -81,10 +87,10 @@ if (restFulControllers.length > 0) {
 /**
  * permission all
  */
-app.get('*', (req, res) => {
-    return res.json({
-        "message": "restricted access"
-    })
+app.get('*', (req, res, next) => {
+    let data = fs.readFileSync(staticPath + "/index.html");
+    res.writeHead(200, {"Content-Type": "text/html; charset=UTF-8"});
+    res.end(data);
 })
 
 //start app

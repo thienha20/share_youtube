@@ -1,18 +1,28 @@
-import React, {useEffect} from "react"
+import React, {useEffect, useState} from "react"
 
 import MainLayout from "../../../../src/layout/MainLayout"
-import {useSelector} from "react-redux"
+import {useDispatch, useSelector} from "react-redux"
 import {useHistory} from "react-router-dom"
 import Box from "@mui/material/Box"
 import Avatar from "@mui/material/Avatar"
-import AppRegistrationIcon from '@mui/icons-material/AppRegistration'
+import AppRegistrationIcon from "@mui/icons-material/AppRegistration"
 import Typography from "@mui/material/Typography"
 import TextField from "@mui/material/TextField"
 import Button from "@mui/material/Button"
+import {ValidateEmail} from "../../../utils/valid"
+import allActions from "../../../store/actions"
 
 const Register = () => {
+    const [email, setEmail] = useState("")
+    const [password, setPassword] = useState("")
+    const [confirmPassword, setConfirmPassword] = useState("")
+    const [validEmail, setValidEmail] = useState(false)
+    const [errorMessage, setErrorMessage] = useState("Password do not match!")
+    const [validPassword, setValidPassword] = useState(false)
+    const [validConfirmPassword, setValidConfirmPassword] = useState(false)
     let isLoggingIn = useSelector(state => state.users.isLoggingIn)
     const history = useHistory()
+    const dispatch = useDispatch()
 
     useEffect(() => {
         if (isLoggingIn) {
@@ -22,6 +32,27 @@ const Register = () => {
 
     const handleSubmit = (event) => {
         event.preventDefault()
+        if (!ValidateEmail(email)) {
+            setValidEmail(true)
+            return false
+        }
+        if (password.length < 4) {
+            setErrorMessage("Password must be more than 4 characters")
+            setValidPassword(true)
+            return false
+        }
+        if (password !== confirmPassword) {
+            setErrorMessage("Password do not match!")
+            setValidPassword(true)
+            return false
+        }
+        dispatch(allActions.users.userRegister({
+            user: {
+                email,
+                password
+            },
+            loading: true
+        }, history))
     }
 
     return (
@@ -52,6 +83,14 @@ const Register = () => {
                         name="email"
                         autoComplete="email"
                         autoFocus
+                        error={validEmail}
+                        onChange={e => {
+                            if (ValidateEmail(e.target.value)) {
+                                setValidEmail(false)
+                            }
+                            setEmail(e.target.value)
+                        }}
+                        helperText={validEmail ? "Email incorrect!" : null}
                     />
                     <TextField
                         margin="normal"
@@ -62,6 +101,34 @@ const Register = () => {
                         type="password"
                         id="password"
                         autoComplete="current-password"
+                        onChange={e => {
+                            setPassword(e.target.value)
+                            if (e.target.value === confirmPassword) {
+                                setValidPassword(false)
+                                setValidConfirmPassword(false)
+                            }
+                        }}
+                        error={validPassword}
+                        helperText={validPassword ? errorMessage : null}
+                    />
+                    <TextField
+                        margin="normal"
+                        required
+                        fullWidth
+                        name="confirmPassword"
+                        label="Confirm Password"
+                        type="password"
+                        id="confirmPassword"
+                        autoComplete="current-password"
+                        onChange={e => {
+                            setConfirmPassword(e.target.value)
+                            if (password === e.target.value) {
+                                setValidPassword(false)
+                                setValidConfirmPassword(false)
+                            }
+                        }}
+                        error={validConfirmPassword}
+                        helperText={validConfirmPassword ? "Password do not match!" : null}
                     />
                     <Button
                         type="submit"

@@ -12,10 +12,13 @@ import ThumbDownIcon from "@mui/icons-material/ThumbDown"
 import ModeCommentOutlinedIcon from "@mui/icons-material/ModeCommentOutlined"
 import {getParamsAsObject} from "../../../utils/url"
 
-const Videos = memo((props) => {
+const Videos = () => {
     const parsed = getParamsAsObject(window.location.search)
     const paramsInit = useMemo(() => {
         return {
+            sort: {
+                timestamp: -1
+            },
             itemPerPage: 5,
             ...parsed
         }
@@ -27,6 +30,10 @@ const Videos = memo((props) => {
     let params = useSelector(state => state.shares.params)
     let startParams = useSelector(state => state.shares.startParams)
     let pageTotal = Math.ceil((params && params.total ? params.total : (rows ? rows.length : 0)) / paramsInit.itemPerPage)
+
+    useEffect(() => {
+        return () => dispatch(allActions.shares.setStart())
+    }, [])
 
     useEffect(() => {
         if (startParams) {
@@ -92,10 +99,10 @@ const Videos = memo((props) => {
                     </Grid>
                 )
             ) : null}
-            {pageTotal > 1 ? <Pagination count={pageTotal} page={params.page ? parseInt(params.page) : 1} sx={{mt:2}}
+            {pageTotal > 1 ? <Pagination count={pageTotal} page={params.page ? parseInt(params.page) : 1} sx={{mt: 2}}
                                          onChange={(e, page) => handleChangePage(e, page - 1)}/> : null}
         </>
     )
-})
+}
 
 export default Videos

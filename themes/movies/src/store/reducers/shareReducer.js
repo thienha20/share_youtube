@@ -7,7 +7,7 @@ const INITIAL_STATE = {
     params: {
         page: 1,
         sort: {
-            timestamp: -1
+            timestamp: 1
         }
     },
     startParams: true
@@ -18,6 +18,11 @@ const ShareReducer = (state = INITIAL_STATE, action) => {
         case actionTypes.SHARE_ADD:
             return {
                 ...state,
+            }
+        case actionTypes.SHARE_START:
+            return {
+                ...state,
+                startParams: true
             }
         case actionTypes.SHARE_VIDEO_LISTING:
             return {
