@@ -30,6 +30,7 @@ Run the program (open terminal)
 npm run local
 ```
 
+If you want override react themes, you go to folder (themes/movies/src)
 ## Use
 
 Open browser and goto link (http://localhost:4000)
